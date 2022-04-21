@@ -5,7 +5,10 @@
   "main": "serverless.ts",
   "scripts": {
     "lint": "eslint . --ext .ts",
-    "lint:fix": "eslint . --ext .ts --fix"
+    "lint:fix": "eslint . --ext .ts --fix",
+    "dynamodb:install": "sls dynamodb install",
+    "dynamodb:start": "sls dynamodb start --port 8080",
+    "dev": "sls offline --verbose"
   },
   "engines": {
     "node": ">=14.15.0"
@@ -32,7 +35,9 @@
     "json-schema-to-ts": "^1.5.0",
     "prettier": "2.6.2",
     "serverless": "^3.0.0",
+    "serverless-dynamodb-local": "^0.2.40",
     "serverless-esbuild": "^1.23.3",
+    "serverless-offline": "^8.7.0",
     "ts-node": "^10.4.0",
     "tsconfig-paths": "^3.9.0",
     "typescript": "^4.6.3"
