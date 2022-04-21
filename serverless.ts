@@ -1,10 +1,13 @@
-import hello from "@functions/hello";
 import type { AWS } from "@serverless/typescript";
 
 const serverlessConfiguration: AWS = {
   service: "todos-serverless",
   frameworkVersion: "3",
-  plugins: ["serverless-esbuild"],
+  plugins: [
+    "serverless-esbuild",
+    "serverless-dynamodb-local",
+    "serverless-offline",
+  ],
   provider: {
     name: "aws",
     runtime: "nodejs14.x",
@@ -17,8 +20,20 @@ const serverlessConfiguration: AWS = {
       NODE_OPTIONS: "--enable-source-maps --stack-trace-limit=1000",
     },
   },
-  // import the function via paths
-  functions: { hello },
+  functions: {
+    addTodos: {
+      handler: "src/functions/add-todos.handler",
+      events: [
+        {
+          http: {
+            path: "todos/{id}",
+            method: "post",
+            cors: true,
+          },
+        },
+      ],
+    },
+  },
   package: { individually: true },
   custom: {
     esbuild: {
@@ -30,6 +45,11 @@ const serverlessConfiguration: AWS = {
       define: { "require.resolve": undefined },
       platform: "node",
       concurrency: 10,
+    },
+    dynamodb: {
+      stages: ["dev", "local"],
+      port: 8080,
+      inMemory: true,
     },
   },
 };
