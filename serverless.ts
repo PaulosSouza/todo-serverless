@@ -48,8 +48,37 @@ const serverlessConfiguration: AWS = {
     },
     dynamodb: {
       stages: ["dev", "local"],
-      port: 8080,
-      inMemory: true,
+      start: {
+        port: 8080,
+        inMemory: true,
+        migrate: true,
+      },
+    },
+  },
+  resources: {
+    Resources: {
+      dbTodos: {
+        Type: "AWS::DynamoDB::Table",
+        Properties: {
+          TableName: "todos",
+          AttributeDefinitions: [
+            {
+              AttributeName: "id",
+              AttributeType: "S",
+            },
+          ],
+          KeySchema: [
+            {
+              AttributeName: "id",
+              KeyType: "HASH",
+            },
+          ],
+          ProvisionedThroughput: {
+            ReadCapacityUnits: 5,
+            WriteCapacityUnits: 5,
+          },
+        },
+      },
     },
   },
 };
