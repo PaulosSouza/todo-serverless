@@ -33,6 +33,18 @@ const serverlessConfiguration: AWS = {
         },
       ],
     },
+    getTodos: {
+      handler: "src/functions/get-todos.handler",
+      events: [
+        {
+          http: {
+            path: "todos/{id}",
+            method: "get",
+            cors: true,
+          },
+        },
+      ],
+    },
   },
   package: { individually: true },
   custom: {
@@ -66,11 +78,19 @@ const serverlessConfiguration: AWS = {
               AttributeName: "id",
               AttributeType: "S",
             },
+            {
+              AttributeName: "user_id",
+              AttributeType: "S",
+            },
           ],
           KeySchema: [
             {
-              AttributeName: "id",
+              AttributeName: "user_id",
               KeyType: "HASH",
+            },
+            {
+              AttributeName: "id",
+              KeyType: "RANGE",
             },
           ],
           ProvisionedThroughput: {
